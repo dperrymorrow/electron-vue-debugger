@@ -14,11 +14,11 @@
   },
   "homepage": "https://github.com/dperrymorrow/electron-vue-debugger#readme",
   "dependencies": {
-    "electron": "1.6.5",
-    "type-of-is": "3.5.1"
+    "electron": "^1.6.0",
+    "type-of-is": "^3.5.1"
   },
   "devDependencies": {
-    "stylus": "0.54.5"
+    "stylus": "^0.54.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
