@@ -2,20 +2,18 @@
 
 
 ## Install
+
+```
+npm install electron-vue-debugger -save-dev
+```
 > component must be registered.
 
 ``` javascript
-Vue.use(require('@welocalize/useful-shit').vue.components);
+Vue.use(require('electron-vue-debugger'));
 ```
 
-### Require the styles
-> this assumes that you have `-I node_modules` added as a path to your stylus compile script.
+## Add the Component to your main app file.
 
-```stylus
-@require '@welocalize/useful-shit/src/vue/components/debugger/*'
-```
-
-### Add the Component to your main app file.
 > keepAlive will determine if the debugger keeps state when open and closed, if false, the panel does not render when not opened. This can help with performance.
 
 ```html
