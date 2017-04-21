@@ -1,0 +1,27 @@
+{
+  "name": "electron-vue-debugger",
+  "version": "1.0.0",
+  "description": "vue.js debugger for electron apps",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dperrymorrow/electron-vue-debugger.git"
+  },
+  "author": "David Morrow",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dperrymorrow/electron-vue-debugger/issues"
+  },
+  "homepage": "https://github.com/dperrymorrow/electron-vue-debugger#readme",
+  "dependencies": {
+    "electron": "1.6.5",
+    "type-of-is": "3.5.1"
+  },
+  "devDependencies": {
+    "stylus": "0.54.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "stylus": "stylus --compress styles/debugger.styl"
+  }
+}
