@@ -37,11 +37,8 @@ module.exports = {
   mounted() {
     fs.readFile(__dirname + '/../styles/debugger.css', (err, styles) => {
       const tag = document.createElement('style');
-
-      console.log(styles);
       tag.innerText = styles;
       document.body.appendChild(tag);
-      // document.appendText(`<style>${styles}</style>`);
     });
 
     window.addEventListener('keydown', this.shortcuts);
