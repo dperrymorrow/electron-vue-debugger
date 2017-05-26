@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const Type = require('type-of-is');
+const Type = require("type-of-is");
 
 module.exports = {
-  name: 'obj-tree',
+  name: "obj-tree",
 
   template: `
 
@@ -11,7 +11,7 @@ module.exports = {
 
       <span class="key"
         v-if="name != undefined" :class="type" @click.prevent="toggle">
-        {{ name }}<span class="divider">: </span>
+        {{ name }}<span class="key-val-divider">: </span>
       </span>
 
       <span class="type"
@@ -35,7 +35,7 @@ module.exports = {
     </div>
   `,
 
-  props: ['name', 'value', 'parentOpen'],
+  props: ["name", "value", "parentOpen"],
 
   data() {
     return {
@@ -53,8 +53,8 @@ module.exports = {
     },
 
     length() {
-      if (this.type == 'Object') return Object.keys(this.value).length;
-      if (this.type == 'Array') return this.value.length;
+      if (this.type == "Object") return Object.keys(this.value).length;
+      if (this.type == "Array") return this.value.length;
       return 0;
     },
     type() {
@@ -67,7 +67,7 @@ module.exports = {
 
   methods: {
     truncateTree(val) {
-      if (Type.string(val) == 'Array' && this.length > this.maxLength) {
+      if (Type.string(val) == "Array" && this.length > this.maxLength) {
         const arr = val.slice(0, this.maxLength);
         arr.push(`... (${val.length - arr.length} more)`);
         return arr;
@@ -80,12 +80,11 @@ module.exports = {
     },
 
     printValue() {
-      if (this.type == 'null') return 'null';
-      if (this.value == undefined) return 'undefined';
-      if (this.value == '' && this.type == 'String') return '""';
-      if (this.type == 'Array' && this.value.length == 0) return '[]';
-      if (this.type == 'Object' && Object.keys(this.value).length == 0)
-        return '{}';
+      if (this.type == "null") return "null";
+      if (this.value == undefined) return "undefined";
+      if (this.value == "" && this.type == "String") return '""';
+      if (this.type == "Array" && this.value.length == 0) return "[]";
+      if (this.type == "Object" && Object.keys(this.value).length == 0) return "{}";
 
       return this.value.toString();
     },

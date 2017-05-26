@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const fs = require('fs');
+const fs = require("fs");
 
 module.exports = {
-  name: 'debugger',
+  name: "debugger",
 
   template: `
     <div class="vue-debugger-container" @click.prevent.stop="">
@@ -35,28 +35,28 @@ module.exports = {
   `,
 
   mounted() {
-    fs.readFile(__dirname + '/../styles/debugger.css', (err, styles) => {
-      const tag = document.createElement('style');
+    fs.readFile(__dirname + "/../styles/debugger.css", (err, styles) => {
+      const tag = document.createElement("style");
       tag.innerText = styles;
       document.body.appendChild(tag);
     });
 
-    window.addEventListener('keydown', this.shortcuts);
-    window.addEventListener('mouseup', this.disableDrag);
-    window.addEventListener('mousemove', this.drag);
-    window.addEventListener('resize', this.updateHeight);
+    window.addEventListener("keydown", this.shortcuts);
+    window.addEventListener("mouseup", this.disableDrag);
+    window.addEventListener("mousemove", this.drag);
+    window.addEventListener("resize", this.updateHeight);
   },
 
   beforeDestroy() {
-    window.removeEventListener('keydown', this.shortcuts);
-    window.removeEventListener('mouseup', this.disableDrag);
-    window.removeEventListener('mousemove', this.drag);
-    window.removeEventListener('resize', this.updateHeight);
+    window.removeEventListener("keydown", this.shortcuts);
+    window.removeEventListener("mouseup", this.disableDrag);
+    window.removeEventListener("mousemove", this.drag);
+    window.removeEventListener("resize", this.updateHeight);
   },
 
   methods: {
     shortcuts(ev) {
-      if (ev.ctrlKey && ev.code == 'KeyD') this.toggle();
+      if (ev.ctrlKey && ev.code == "KeyD") this.toggle();
     },
     disableDrag() {
       this.dragging = false;
@@ -66,45 +66,42 @@ module.exports = {
     },
     toggle() {
       this.open = !this.open;
-      this.$el.querySelector('.vue-debugger.pane').removeAttribute('style');
+      this.$el.querySelector(".vue-debugger.pane").removeAttribute("style");
 
-      let storedY = localStorage.getItem('debugger-y');
-      const pane = this.$el.querySelector('.vue-debugger.pane');
+      let storedY = localStorage.getItem("debugger-y");
+      const pane = this.$el.querySelector(".vue-debugger.pane");
 
       if (storedY > document.body.offsetHeight) {
         storedY = null;
-        localStorage.setItem('debugger-y', null);
+        localStorage.setItem("debugger-y", null);
       }
 
       if (this.open) {
-        if (storedY && storedY !== 'null') {
-          pane.style.top = storedY + 'px';
+        if (storedY && storedY !== "null") {
+          pane.style.top = storedY + "px";
         } else {
-          pane.style.top = '50%';
+          pane.style.top = "50%";
         }
 
         this.updateHeight();
       }
     },
     clearStore() {
-      localStorage.setItem('debugger-y', null);
+      localStorage.setItem("debugger-y", null);
     },
     drag(event) {
-      const pane = this.$el.querySelector('.vue-debugger.pane');
+      const pane = this.$el.querySelector(".vue-debugger.pane");
       if (this.dragging) {
         let top = event.pageY;
-        top = top > document.body.offsetHeight
-          ? document.body.offsetHeight
-          : top;
-        pane.style.top = top + 'px';
-        localStorage.setItem('debugger-y', top);
+        top = top > window.innerHeight ? window.innerHeight : top;
+        pane.style.top = top + "px";
+        localStorage.setItem("debugger-y", top);
         this.updateHeight();
       }
     },
     updateHeight() {
-      const pane = this.$el.querySelector('.vue-debugger.pane');
-      pane.style.height =
-        document.body.offsetHeight - parseInt(pane.style.top) + 'px';
+      const pane = this.$el.querySelector(".vue-debugger.pane");
+      pane.style.height = window.innerHeight - parseInt(pane.style.top) + "px";
     },
     dataChange(args) {
       this.activeKey = args.id;
@@ -139,10 +136,10 @@ module.exports = {
       if (!this.activeEl) return {};
       const rect = this.activeEl.getBoundingClientRect();
       const coords = {
-        top: rect.top + 'px',
-        left: rect.left + 'px',
-        width: this.activeEl.offsetWidth + 'px',
-        height: this.activeEl.offsetHeight + 'px',
+        top: rect.top + "px",
+        left: rect.left + "px",
+        width: this.activeEl.offsetWidth + "px",
+        height: this.activeEl.offsetHeight + "px",
       };
       return coords;
     },
@@ -154,7 +151,7 @@ module.exports = {
       dragging: false,
       activeEl: null,
       showHighlight: false,
-      activeKey: 'vuex',
+      activeKey: "vuex",
       open: false,
       dataSource: this.$store ? this.$store.state : null,
     };

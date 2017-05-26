@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
 let int = 0;
 
 module.exports = {
-  name: 'nav-tree',
+  name: "nav-tree",
 
-  props: ['components', 'activeKey'],
+  props: ["components", "activeKey"],
 
   template: `
     <div class="vue-debugger nav-pane">
@@ -43,11 +43,7 @@ module.exports = {
     if (this.$store) {
       this.$store.subscribe((mutation, state) => {
         // this.mutations.push(mutation);
-        Vue.set(
-          this.mutations,
-          mutation.type + ' | ' + this.timeNow(),
-          mutation.payload
-        );
+        Vue.set(this.mutations, mutation.type + " | " + this.timeNow(), mutation.payload);
       });
     }
   },
@@ -61,16 +57,11 @@ module.exports = {
   methods: {
     timeNow() {
       var d = new Date();
-      return [
-        d.getHours(),
-        d.getMinutes(),
-        d.getSeconds(),
-        (d.getMilliseconds() / 10).toFixed(2),
-      ].join(':');
+      return [d.getHours(), d.getMinutes(), d.getSeconds(), (d.getMilliseconds() / 10).toFixed(2)].join(":");
     },
 
     dataChange(args) {
-      this.$emit('dataChange', args);
+      this.$emit("dataChange", args);
     },
 
     clearMutations() {

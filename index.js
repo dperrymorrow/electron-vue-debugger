@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const components = require('./components');
+const components = require("./components");
 
 module.exports = {
   install(Vue) {

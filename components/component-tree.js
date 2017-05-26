@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const Type = require('type-of-is');
-const { remote } = require('electron');
+const Type = require("type-of-is");
+const { remote } = require("electron");
 
 module.exports = {
-  name: 'component-tree',
+  name: "component-tree",
   template: `
     <li :class="{ active: isActive, opened: open, children: hasChildren }">
       <a class="component-link" @click.prevent="select">
@@ -49,7 +49,7 @@ module.exports = {
     clearInterval(this.int);
   },
 
-  props: ['component', 'activeKey'],
+  props: ["component", "activeKey"],
 
   computed: {
     hasChildren() {
@@ -69,9 +69,9 @@ module.exports = {
 
       for (let key in this.component) {
         if (
-          key.indexOf('$') !== 0 &&
-          key.indexOf('_') !== 0 &&
-          Type.string(this.component[key]) !== 'Function' &&
+          key.indexOf("$") !== 0 &&
+          key.indexOf("_") !== 0 &&
+          Type.string(this.component[key]) !== "Function" &&
           !Object.keys(this.componentData).includes(key) &&
           !Object.keys(this.componentProps).includes(key)
         ) {
@@ -92,12 +92,10 @@ module.exports = {
     },
     inspect() {
       const coords = this.component.$el.getBoundingClientRect();
-      remote
-        .getCurrentWebContents()
-        .inspectElement(parseInt(coords.left), parseInt(coords.top));
+      remote.getCurrentWebContents().inspectElement(parseInt(coords.left), parseInt(coords.top));
     },
     dataChange(args) {
-      this.$emit('dataChange', args);
+      this.$emit("dataChange", args);
     },
     select() {
       this.triggerData();
