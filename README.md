@@ -1,4 +1,4 @@
-# Debugger Component
+# 🔮 Debugger Component
 
 ![demo](https://user-images.githubusercontent.com/64978/26994758-dc5db3dc-4d1d-11e7-93ce-57b481c3973a.png)
 
