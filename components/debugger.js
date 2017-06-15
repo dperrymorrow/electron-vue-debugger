@@ -1,20 +1,20 @@
 "use strict";
 
 const fs = require("fs");
+const throttle = require("lodash.throttle");
 
 module.exports = {
   name: "debugger",
 
   template: `
     <div class="vue-debugger-container" @click.prevent.stop="">
-
       <transition name="debugger-highlight">
-        <div class="vue-debugger highlighter" :style="highlighter" v-if="showHighlight"></div>
+        <div class="vue-debugger highlighter" :style="highlighter" v-if="showHighlight" @click.stop.prevent="selectTargeted"></div>
       </transition>
 
       <div class="vue-debugger pane" :class="{ opened: open }">
-
         <div class="drag-handle" @mousedown.stop.prevent="dragging = true"></div>
+        <div class="vue-debugger target" :class="{ active: targeting }" @click.prevent="toggleTargeting">◎</div>
         <div class="vue-debugger toggle" @dblclick="clearStore" @click.prevent="toggle">🔮</div>
 
         <nav-tree
@@ -104,11 +104,23 @@ module.exports = {
       pane.style.height = window.innerHeight - parseInt(pane.style.top) + "px";
     },
     dataChange(args) {
-      this.activeKey = args.id;
-      this.dataSource = args.data;
-      this.activeEl = args.element ? args.element : null;
-      this.showHighlight = this.activeEl !== null;
-
+      const { component } = args;
+      if (this.targeting) this.toggleTargeting();
+      this.selectComponent(component);
+      this.setHighlightTimer();
+    },
+    selectComponent(component) {
+      this.activeKey = component._uid;
+      this.dataSource = {
+        data: component.$data,
+        props: component.$options.propsData || {},
+        computed: this.getComputed(component),
+      };
+      this.activeEl = component.$el;
+      this.showHighlight = this.activeEl != undefined;
+      this.targeted = component;
+    },
+    setHighlightTimer() {
       if (this.highlightTimer) clearTimeout(this.highlightTimer);
 
       if (this.showHighlight) {
@@ -117,6 +129,48 @@ module.exports = {
           this.highlightTimer = null;
         }, 1500);
       }
+    },
+    getComputed(component) {
+      const computed = {};
+
+      for (let key in component.$options.computed) {
+        computed[key] = component[key];
+      }
+
+      return computed;
+    },
+    toggleTargeting() {
+      this.targeting = !this.targeting;
+      this.showHighlight = false;
+      if (this.targeting) {
+        document.addEventListener("mousemove", this.handleMouseMove);
+      } else {
+        document.removeEventListener("mousemove", this.handleMouseMove);
+      }
+    },
+    selectTargeted() {
+      if (this.targeting) this.toggleTargeting();
+      if (!this.open) this.toggle();
+    },
+    handleMouseMove: throttle(function(ev) {
+      const component = this.findComponent(ev.target, this.components);
+      if (component) {
+        this.selectComponent(component);
+      }
+    }, 200),
+    findComponent($el, components) {
+      for (var i = 0; i < components.length; i++) {
+        const component = components[i];
+        if (component.$options._componentTag === "debugger") continue;
+        if (component.$el === $el) return component;
+        if (component.$el.contains($el)) {
+          const foundComponent = this.findComponent($el, component.$children);
+          if (foundComponent) return foundComponent;
+          return component;
+        }
+      }
+      if (!$el.parentElement) return;
+      return this.findComponent($el.parentElement, components);
     },
   },
 
@@ -154,6 +208,8 @@ module.exports = {
       activeKey: "vuex",
       open: false,
       dataSource: this.$store ? this.$store.state : null,
+      targeting: false,
+      targeted: undefined,
     };
   },
 };

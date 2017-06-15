@@ -21,13 +21,18 @@ module.exports = {
       </a>
 
 
-      <ul v-if="hasChildren && open">
+      <ul v-if="hasChildren">
         <component-tree
-           v-for="comp in children" v-on:dataChange="dataChange" :activeKey="activeKey" :component="comp" :key="comp._uid">
+          v-show="open"
+          v-for="comp in children"
+          @dataChange="dataChange"
+          @set-open="setOpen"
+          :activeKey="activeKey"
+          :component="comp"
+          :key="comp._uid"
+        >
         </component-tree>
       </ul>
-
-
     </li>
   `,
 
@@ -58,32 +63,21 @@ module.exports = {
     isActive() {
       return this.component._uid == this.activeKey;
     },
-    componentData() {
-      return this.component.$data || {};
-    },
-    componentProps() {
-      return this.component.$options.propsData || {};
-    },
-    componentComputed() {
-      const computed = {};
+  },
 
-      for (let key in this.component) {
-        if (
-          key.indexOf("$") !== 0 &&
-          key.indexOf("_") !== 0 &&
-          Type.string(this.component[key]) !== "Function" &&
-          !Object.keys(this.componentData).includes(key) &&
-          !Object.keys(this.componentProps).includes(key)
-        ) {
-          computed[key] = this.component[key];
-        }
+  watch: {
+    isActive(val) {
+      if (val) {
+        this.setOpen(true);
       }
-
-      return computed;
     },
   },
 
   methods: {
+    setOpen(val) {
+      if (this.open !== val) this.open = val;
+      this.$emit("set-open", val);
+    },
     sendToConsole() {
       window.$vm = this.component;
       console.groupCollapsed(`window.$vm = ${this.component.$options.name}`);
@@ -102,26 +96,9 @@ module.exports = {
       this.toggle();
     },
     triggerData() {
-      const data = {
-        data: this.componentData,
-        props: this.componentProps,
-        computed: this.componentComputed,
-      };
-
-      if (this.component.$v) {
-        data.$v = this.component.$v;
-      }
-
       this.dataChange({
-        element: this.component.$el,
-        name: this.component.$options.name,
-        id: this.component._uid,
-        data,
+        component: this.component,
       });
-    },
-    refresh() {
-      this.triggerData();
-      this.open = true;
     },
     toggle() {
       this.open = !this.open;
