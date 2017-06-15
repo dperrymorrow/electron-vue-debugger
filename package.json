@@ -15,6 +15,7 @@
   "homepage": "https://github.com/dperrymorrow/electron-vue-debugger#readme",
   "dependencies": {
     "electron": "^1.6.0",
+    "lodash.debounce": "4.0.8",
     "lodash.throttle": "4.1.1",
     "type-of-is": "^3.5.1"
   },

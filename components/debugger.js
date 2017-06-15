@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const throttle = require("lodash.throttle");
+const debounce = require("lodash.debounce");
 
 module.exports = {
   name: "debugger",
@@ -9,7 +10,14 @@ module.exports = {
   template: `
     <div class="vue-debugger-container" @click.prevent.stop="">
       <transition name="debugger-highlight">
-        <div class="vue-debugger highlighter" :style="highlighter" v-if="showHighlight" @click.stop.prevent="selectTargeted"></div>
+        <div
+          class="vue-debugger highlighter"
+          :style="highlighter"
+          v-if="showHighlight"
+          @click.stop.prevent="selectTargeted"
+        >
+          <h4>{{ targeted.$options._componentTag }}</h4>
+        </div>
       </transition>
 
       <div class="vue-debugger pane" :class="{ opened: open }">
@@ -104,9 +112,15 @@ module.exports = {
       pane.style.height = window.innerHeight - parseInt(pane.style.top) + "px";
     },
     dataChange(args) {
-      const { component } = args;
+      const { component, data, id } = args;
       if (this.targeting) this.toggleTargeting();
-      this.selectComponent(component);
+      if (component) {
+        this.selectComponent(component);
+      } else {
+        this.dataSource = data;
+        this.activeKey = id;
+      }
+
       this.setHighlightTimer();
     },
     selectComponent(component) {
@@ -143,9 +157,13 @@ module.exports = {
       this.targeting = !this.targeting;
       this.showHighlight = false;
       if (this.targeting) {
-        document.addEventListener("mousemove", this.handleMouseMove);
+        document.documentElement.addEventListener("mousemove", this.handleMouseMove);
+        document.documentElement.addEventListener("mousemove", this.handleMouseStop);
+        document.documentElement.addEventListener("keydown", this.checkForEscape);
       } else {
-        document.removeEventListener("mousemove", this.handleMouseMove);
+        document.documentElement.removeEventListener("mousemove", this.handleMouseMove);
+        document.documentElement.removeEventListener("mousemove", this.handleMouseStop);
+        document.documentElement.removeEventListener("keydown", this.checkForEscape);
       }
     },
     selectTargeted() {
@@ -153,11 +171,20 @@ module.exports = {
       if (!this.open) this.toggle();
     },
     handleMouseMove: throttle(function(ev) {
+      this.mouseMoving = true;
       const component = this.findComponent(ev.target, this.components);
       if (component) {
         this.selectComponent(component);
       }
-    }, 200),
+    }, 50),
+    handleMouseStop: debounce(function(ev) {
+      this.mouseMoving = false;
+    }, 75),
+    checkForEscape(ev) {
+      if (ev.keyCode === 27 && this.targeting) {
+        this.toggleTargeting();
+      }
+    },
     findComponent($el, components) {
       for (var i = 0; i < components.length; i++) {
         const component = components[i];
@@ -194,6 +221,8 @@ module.exports = {
         left: rect.left + "px",
         width: this.activeEl.offsetWidth + "px",
         height: this.activeEl.offsetHeight + "px",
+        "pointer-events": this.mouseMoving ? "none" : "initial",
+        cursor: this.mouseMoving ? "initial" : "pointer",
       };
       return coords;
     },
@@ -210,6 +239,7 @@ module.exports = {
       dataSource: this.$store ? this.$store.state : null,
       targeting: false,
       targeted: undefined,
+      mouseMoving: false,
     };
   },
 };
