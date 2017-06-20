@@ -176,10 +176,10 @@ module.exports = {
       if (component) {
         this.selectComponent(component);
       }
-    }, 50),
+    }, 20),
     handleMouseStop: debounce(function(ev) {
       this.mouseMoving = false;
-    }, 75),
+    }, 35),
     checkForEscape(ev) {
       if (ev.keyCode === 27 && this.targeting) {
         this.toggleTargeting();
