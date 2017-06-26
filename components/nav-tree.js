@@ -26,10 +26,11 @@ module.exports = {
         <component-tree
           v-for="comp in components"
           :key="comp._uid"
-          v-on:dataChange="dataChange"
-          v-if="comp.$options.name != 'debugger'"
+          @dataChange="dataChange"
+          v-if="comp.$options._componentTag !== 'debugger'"
           :component="comp"
-          :activeKey="activeKey">
+          :activeKey="activeKey"
+        >
         </component-tree>
       </ul>
     </div>
@@ -42,7 +43,6 @@ module.exports = {
 
     if (this.$store) {
       this.$store.subscribe((mutation, state) => {
-        // this.mutations.push(mutation);
         Vue.set(this.mutations, mutation.type + " | " + this.timeNow(), mutation.payload);
       });
     }
