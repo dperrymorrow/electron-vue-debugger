@@ -53,7 +53,7 @@ $drag-bar-height = 20px
 
   .vue-debugger.highlighter
     position: fixed
-    transition: all .3s ease
+    transition: all .3s ease-in-out
     background-color: rgba($debug-aqua, 0.25)
     border: 5px solid rgba($debug-aqua, 0.45)
     border-radius: 5px
@@ -62,6 +62,12 @@ $drag-bar-height = 20px
     width: 200px
     height: 200px
     z-index: 1000
+
+    h4
+      display: inline-block
+      background-color: white
+      border-radius: 3px
+      padding: 0 1rem
 
   a
     cursor: pointer !important
@@ -105,7 +111,7 @@ $drag-bar-height = 20px
         content:'\2630'
         color: lighten($debug-medium, 65%)
 
-    .vue-debugger.toggle
+    .vue-debugger.toggle, .vue-debugger.target
       padding: .5em
       // background-color: $debug-medium
       position: absolute
@@ -114,9 +120,12 @@ $drag-bar-height = 20px
       font-size: 2em
       z-index: 1000
       cursor: pointer
+    .vue-debugger.target
+      right: 56px
+      color: black
 
-
-
+      &.active
+        color: red
 
   .type, .count, .toolbar .btn
     opacity: .4
