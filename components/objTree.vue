@@ -1,40 +1,38 @@
-"use strict";
 
-const Type = require("type-of-is");
+<template>
+  <div class="vue-debugger obj-tree" :class="{ open: isOpen, empty: length == 0 }" >
 
-module.exports = {
+    <span class="key"
+      v-if="name != undefined" :class="type" @click.prevent="toggle">
+      {{ name }}<span class="key-val-divider">: </span>
+    </span>
+
+    <span class="type"
+      v-if="hasChildren" @click.prevent="toggle" :class="type">
+      {{ type }} {{ length }}
+    </span>
+
+    <span v-if="hasChildren && isOpen" class="type json" @click.prevent="log">toJSON</span>
+
+    <span class="container" v-if="hasChildren && isOpen">
+      <obj-tree
+        v-for="val, key in truncateTree(value)"
+        :key="key"
+        :name="key.toString()" :parentOpen="type =='Array'" :value="val">
+      </obj-tree>
+    </span>
+
+    <span class="value" :class="type" v-else-if="!hasChildren">
+      {{ printValue() }}
+    </span>
+  </div>
+</template>
+
+<script>
+import Type from "type-of-is";
+
+export default {
   name: "obj-tree",
-
-  template: `
-
-    <div class="vue-debugger obj-tree" :class="{ open: isOpen, empty: length == 0 }" >
-
-      <span class="key"
-        v-if="name != undefined" :class="type" @click.prevent="toggle">
-        {{ name }}<span class="key-val-divider">: </span>
-      </span>
-
-      <span class="type"
-        v-if="hasChildren" @click.prevent="toggle" :class="type">
-        {{ type }} {{ length }}
-      </span>
-
-      <span v-if="hasChildren && isOpen" class="type json" @click.prevent="log">toJSON</span>
-
-      <span class="container" v-if="hasChildren && isOpen">
-        <obj-tree
-          v-for="val, key in truncateTree(value)"
-          :key="key"
-          :name="key.toString()" :parentOpen="type =='Array'" :value="val">
-        </obj-tree>
-      </span>
-
-      <span class="value" :class="type" v-else-if="!hasChildren">
-        {{ printValue() }}
-      </span>
-    </div>
-  `,
-
   props: ["name", "value", "parentOpen"],
 
   data() {
@@ -95,3 +93,4 @@ module.exports = {
     },
   },
 };
+</script>

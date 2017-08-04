@@ -1,7 +1,6 @@
 "use strict";
 
 const Type = require("type-of-is");
-const { remote } = require("electron");
 
 module.exports = {
   name: "component-tree",
@@ -15,7 +14,6 @@ module.exports = {
 
         <div class="toolbar" v-if="open || isActive">
           <span class="btn" @click.stop.prevent="triggerData"><strong>Reload</strong></span>
-          <span class="btn" @click.stop.prevent="inspect">Inspect</span>
           <span class="btn" @click.stop.prevent="sendToConsole">$vm</span>
         </div>
       </a>
@@ -83,10 +81,6 @@ module.exports = {
       console.groupCollapsed(`window.$vm = ${this.component.$options.name}`);
       console.log(this.component);
       console.groupEnd();
-    },
-    inspect() {
-      const coords = this.component.$el.getBoundingClientRect();
-      remote.getCurrentWebContents().inspectElement(parseInt(coords.left), parseInt(coords.top));
     },
     dataChange(args) {
       this.$emit("dataChange", args);

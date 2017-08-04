@@ -2,7 +2,7 @@
   "name": "electron-vue-debugger",
   "version": "1.0.6",
   "description": "vue.js debugger for electron apps",
-  "main": "index.js",
+  "main": "./debugger.vue",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dperrymorrow/electron-vue-debugger.git"
@@ -14,16 +14,11 @@
   },
   "homepage": "https://github.com/dperrymorrow/electron-vue-debugger#readme",
   "dependencies": {
-    "electron": "^1.6.0",
     "lodash.debounce": "4.0.8",
     "lodash.throttle": "4.1.1",
     "type-of-is": "^3.5.1"
   },
-  "devDependencies": {
-    "stylus": "^0.54.5"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "stylus": "stylus --compress styles/debugger.styl"
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
