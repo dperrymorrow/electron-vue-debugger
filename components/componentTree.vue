@@ -1,38 +1,39 @@
-"use strict";
 
-const Type = require("type-of-is");
+<template>
+  <li :class="{ active: isActive, opened: open, children: hasChildren }">
+    <a class="component-link" @click.prevent="select">
+      <{{ component.$options.name || component.$options._componentTag}}>
+      <span class="count" v-if="hasChildren">
+        {{ children.length }}
+      </span>
 
-module.exports = {
+      <div class="toolbar" v-if="open || isActive">
+        <span class="btn" @click.stop.prevent="triggerData"><strong>Reload</strong></span>
+        <span class="btn" @click.stop.prevent="sendToConsole">$vm</span>
+      </div>
+    </a>
+
+
+    <ul v-if="hasChildren">
+      <component-tree
+        v-show="open"
+        v-for="comp in children"
+        @dataChange="dataChange"
+        @set-open="setOpen"
+        :activeKey="activeKey"
+        :component="comp"
+        :key="comp._uid"
+      >
+      </component-tree>
+    </ul>
+  </li>
+</template>
+
+<script>
+import Type from "type-of-is";
+
+export default {
   name: "component-tree",
-  template: `
-    <li :class="{ active: isActive, opened: open, children: hasChildren }">
-      <a class="component-link" @click.prevent="select">
-        <{{ component.$options.name || component.$options._componentTag}}>
-        <span class="count" v-if="hasChildren">
-          {{ children.length }}
-        </span>
-
-        <div class="toolbar" v-if="open || isActive">
-          <span class="btn" @click.stop.prevent="triggerData"><strong>Reload</strong></span>
-          <span class="btn" @click.stop.prevent="sendToConsole">$vm</span>
-        </div>
-      </a>
-
-
-      <ul v-if="hasChildren">
-        <component-tree
-          v-show="open"
-          v-for="comp in children"
-          @dataChange="dataChange"
-          @set-open="setOpen"
-          :activeKey="activeKey"
-          :component="comp"
-          :key="comp._uid"
-        >
-        </component-tree>
-      </ul>
-    </li>
-  `,
 
   data() {
     return {
@@ -99,3 +100,4 @@ module.exports = {
     },
   },
 };
+</script>

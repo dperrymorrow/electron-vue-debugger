@@ -1,7 +1,6 @@
 
-
 <template>
-  <div class="vue-debugger-container" @click.prevent.stop="">
+  <div class="vue-debugger-container" @click.prevent.stop>
     <transition name="debugger-highlight">
       <div
         class="vue-debugger highlighter"

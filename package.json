@@ -2,7 +2,7 @@
   "name": "electron-vue-debugger",
   "version": "1.0.6",
   "description": "vue.js debugger for electron apps",
-  "main": "./debugger.vue",
+  "main": "./index.vue",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dperrymorrow/electron-vue-debugger.git"
@@ -18,7 +18,21 @@
     "lodash.throttle": "4.1.1",
     "type-of-is": "^3.5.1"
   },
+  "browserify": {
+    "transform": [
+      "babelify",
+      "vueify"
+    ]
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babelify": "^7.3.0",
+    "stylus": "^0.54.5",
+    "vue-hot-reload-api": "^2.1.0",
+    "vueify": "^9.4.1"
   }
 }
