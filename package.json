@@ -24,6 +24,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "stylus": "stylus --compress styles/debugger.styl"
+    "build": "node build.js",
+    "stylus": "stylus --compress styles/debugger.styl && node build.js"
   }
 }

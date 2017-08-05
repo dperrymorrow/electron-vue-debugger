@@ -1,10 +1,7 @@
 "use strict";
 
-let int = 0;
-
 module.exports = {
   name: "nav-tree",
-
   props: ["components", "activeKey"],
 
   template: `
