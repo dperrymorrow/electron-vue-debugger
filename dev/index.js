@@ -1,14 +1,16 @@
-import Vue from "Vue";
+import Vue from "vue";
 import Vuex from "Vuex";
-import App from "./App.vue";
 Vue.use(Vuex);
-
 const store = new Vuex.Store({
   state: { foo: "bar" },
-  modules: {},
+  mutations: {
+    setFoo(state, val) {
+      state.foo = val;
+    },
+  },
 });
 
-console.log(store);
+import App from "./App.vue";
 
 new Vue({
   store,

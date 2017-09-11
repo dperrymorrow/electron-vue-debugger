@@ -306,11 +306,19 @@ $drag-bar-height = 20px
     width: 200px
     height: 200px
     z-index: 1000
+    display: flex
+    align-items: center
+    justify-content: center
+    box-sizing: border-box
 
     h4
+      font-family: Monaco
       display: inline-block
       background-color: white
       border-radius: 3px
+      font-size: 12px
+      margin: 0
+      border: none
       padding: 0 1rem
 
   a

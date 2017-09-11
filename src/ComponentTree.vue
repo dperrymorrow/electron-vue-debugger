@@ -1,9 +1,7 @@
 <template lang="pug">
   li(:class="{ active: isActive, opened: open, children: hasChildren }")
     a.component-link(@click.prevent="select")
-      | &lt;
-      | {{ component.$options.name || component.$options._componentTag}}
-      | &gt;
+      | &lt;{{ component.$options.name || component.$options._componentTag}}&gt;
       span.count(v-if="hasChildren") {{ children.length }}
 
       .toolbar(v-if="open || isActive")
@@ -31,6 +29,7 @@
 import Type from "type-of-is";
 
 export default {
+  name: "ComponentTree",
   data() {
     return {
       open: false,

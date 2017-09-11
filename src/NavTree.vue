@@ -46,7 +46,6 @@ export default {
 
   computed: {
     usingVuex() {
-      console.log(this.$store);
       return typeof this.$store === "undefined" ? false : true;
     },
   },

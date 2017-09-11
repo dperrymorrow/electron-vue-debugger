@@ -33,7 +33,7 @@ import Type from "type-of-is";
 
 export default {
   props: ["name", "value", "parentOpen"],
-
+  name: "ObjTree",
   data() {
     return {
       int: 0,
