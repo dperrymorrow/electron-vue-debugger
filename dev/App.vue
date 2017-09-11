@@ -1,14 +1,17 @@
 <template lang="pug">
   #app
-    h1 Why hello there vue app...
-    debugger(:children="$children")
+    h1
+      | {{ $store.state }}
+    debugger(:components="$children")
 </template>
 
 
 <script>
-import Vue from "Vue";
+import Debugger from "../src";
 
 export default {
-  name: "app",
+  components: {
+    Debugger,
+  },
 };
 </script>

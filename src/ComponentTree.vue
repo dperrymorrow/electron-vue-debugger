@@ -1,41 +1,36 @@
-"use strict";
+<template lang="pug">
+  li(:class="{ active: isActive, opened: open, children: hasChildren }")
+    a.component-link(@click.prevent="select")
+      | &lt;
+      | {{ component.$options.name || component.$options._componentTag}}
+      | &gt;
+      span.count(v-if="hasChildren") {{ children.length }}
 
-const Type = require("type-of-is");
-const { remote } = require("electron");
+      .toolbar(v-if="open || isActive")
+        .btn(@click.stop.prevent="triggerData")
+          strong Reload
 
-module.exports = {
-  name: "component-tree",
-  template: `
-    <li :class="{ active: isActive, opened: open, children: hasChildren }">
-      <a class="component-link" @click.prevent="select">
-        <{{ component.$options.name || component.$options._componentTag}}>
-        <span class="count" v-if="hasChildren">
-          {{ children.length }}
-        </span>
-
-        <div class="toolbar" v-if="open || isActive">
-          <span class="btn" @click.stop.prevent="triggerData"><strong>Reload</strong></span>
-          <span class="btn" @click.stop.prevent="inspect">Inspect</span>
-          <span class="btn" @click.stop.prevent="sendToConsole">$vm</span>
-        </div>
-      </a>
+        .btn(@click.stop.prevent="inspect") Inspect
+        .btn(@click.stop.prevent="sendToConsole") $vm
 
 
-      <ul v-if="hasChildren">
-        <component-tree
-          v-show="open"
-          v-for="comp in children"
-          @dataChange="dataChange"
-          @set-open="setOpen"
-          :activeKey="activeKey"
-          :component="comp"
-          :key="comp._uid"
-        >
-        </component-tree>
-      </ul>
-    </li>
-  `,
+    ul(v-if="hasChildren")
+      component-tree(
+        v-show="open",
+        v-for="comp in children",
+        @dataChange="dataChange",
+        @set-open="setOpen",
+        :activeKey="activeKey",
+        :component="comp",
+        :key="comp._uid"
+      )
 
+</template>
+
+<script>
+import Type from "type-of-is";
+
+export default {
   data() {
     return {
       open: false,
@@ -105,3 +100,4 @@ module.exports = {
     },
   },
 };
+</script>

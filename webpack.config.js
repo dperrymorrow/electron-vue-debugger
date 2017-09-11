@@ -7,7 +7,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
-    filename: ENV == "development" ? "dev.js" : "build.js",
+    libraryTarget: "umd",
+    filename: "build.js",
   },
   module: {
     rules: [
