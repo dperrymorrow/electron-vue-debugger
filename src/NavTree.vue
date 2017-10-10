@@ -35,7 +35,7 @@ export default {
 
     if (this.$store) {
       this.$store.subscribe((mutation, state) => {
-        Vue.set(this.mutations, mutation.type + " | " + this.timeNow(), mutation.payload);
+        this.$set(this.mutations, mutation.type + " | " + this.timeNow(), mutation.payload);
       });
     }
   },
