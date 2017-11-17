@@ -1,6 +1,6 @@
 {
   "name": "electron-vue-debugger",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "vue.js debugger for electron apps",
   "main": "dist/build.js",
   "repository": {
