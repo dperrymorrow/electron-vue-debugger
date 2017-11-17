@@ -1,31 +1,25 @@
 
-<template>
-  <div class="vue-debugger obj-tree" :class="{ open: isOpen, empty: length == 0 }" >
+<template lang="pug">
+  .vue-debugger.obj-tree(:class="{ open: isOpen, empty: length == 0 }")
 
-    <span class="key"
-      v-if="name != undefined" :class="type" @click.prevent="toggle">
-      {{ name }}<span class="key-val-divider">: </span>
-    </span>
+    span.key(v-if="name != undefined" :class="type" @click.prevent="toggle")
+      | {{ name }}
+      span.key-val-divider :&nbsp;
 
-    <span class="type"
-      v-if="hasChildren" @click.prevent="toggle" :class="type">
-      {{ type }} {{ length }}
-    </span>
+    span.type(v-if="hasChildren" @click.prevent="toggle" :class="type") {{ type }} {{ length }}
 
-    <span v-if="hasChildren && isOpen" class="type json" @click.prevent="log">toJSON</span>
+    span.type.json(v-if="hasChildren && isOpen" @click.prevent="log") toJSON
 
-    <span class="container" v-if="hasChildren && isOpen">
-      <obj-tree
+    span.container(v-if="hasChildren && isOpen")
+      obj-tree(
         v-for="val, key in truncateTree(value)"
         :key="key"
-        :name="key.toString()" :parentOpen="type =='Array'" :value="val">
-      </obj-tree>
-    </span>
+        :name="key.toString()"
+        :parentOpen="type =='Array'"
+        :value="val"
+      )
 
-    <span class="value" :class="type" v-else-if="!hasChildren">
-      {{ printValue() }}
-    </span>
-  </div>
+    span.value(:class="type" v-else-if="!hasChildren") {{ printValue() }}
 </template>
 
 <script>

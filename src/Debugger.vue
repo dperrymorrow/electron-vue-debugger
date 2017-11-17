@@ -39,12 +39,6 @@ export default {
   },
 
   mounted() {
-    // fs.readFile(__dirname + "/../styles/debugger.css", (err, styles) => {
-    //   const tag = document.createElement("style");
-    //   tag.innerText = styles;
-    //   document.body.appendChild(tag);
-    // });
-
     window.addEventListener("keydown", this.shortcuts);
     window.addEventListener("mouseup", this.disableDrag);
     window.addEventListener("mousemove", this.drag);
