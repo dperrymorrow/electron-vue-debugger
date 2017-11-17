@@ -87,3 +87,57 @@ export default {
   },
 };
 </script>
+
+
+<style lang="stylus">
+
+@require('./vars')
+
+.vue-debugger .obj-tree
+  display: block
+  padding-left: $debug-padding
+
+  .key
+    cursor: pointer
+    color: $debug-blue
+    font-weight: bold
+    position: relative
+
+    .key-val-divider
+      color: $debug-white
+
+    &.Array, &.Object
+      &:before
+        position: absolute
+        left: -12px
+        content: '▸'
+
+  &.empty .key
+    cursor: auto
+
+    &:before
+      display: none
+
+  .value
+    color: $debug-green
+    word-break: break-all
+
+    &.null, &.undefined
+      color: $debug-orange
+
+    &.Number
+      color: $debug-yellow
+
+    &.Boolean
+      color: $debug-yellow
+
+    &.Array, &.Object
+      color: $debug-white
+
+  .container
+    display: none
+
+  &:not(.empty) > .key:hover
+    color: lighten($debug-blue, 60%)
+
+</style>

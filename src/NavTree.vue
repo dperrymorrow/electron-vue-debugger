@@ -78,3 +78,59 @@ export default {
   },
 };
 </script>
+
+<style lang="stylus">
+@require('./vars')
+
+.vue-debugger.nav-pane
+  box-sizing: border-box
+  width: $debug-nav-width
+  display: inline-block
+  float: left
+  height: 100%
+  overflow: auto
+  padding: $debug-padding
+  padding-right: 0
+  background-color: rgba($debug-dark, 0.95)
+  border-right: 1px solid darken($debug-dark, 10%)
+
+  ul, li
+    list-style: none
+    padding: 0
+
+  ul
+    padding: 0
+    padding-left: $debug-padding
+
+  > ul
+    margin: 0
+    padding: 0
+
+  li
+    padding: .3em
+    padding-right: 0
+    color: $debug-purple
+    position: relative
+
+
+    &.children:before
+      position: absolute
+      left: -12px
+      content: '▸'
+
+    &.children.opened:before
+      content: '▾'
+
+    a
+      color: inherit
+      display: block
+      font-weight: bold
+
+      &:hover
+        .toolbar
+          opacity: 1
+          display: flex
+
+    &.active
+      color: $debug-yellow
+</style>

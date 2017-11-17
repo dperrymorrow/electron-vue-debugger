@@ -237,20 +237,7 @@ export default {
 
 <style lang="stylus">
 
-$debug-dark = #22262e
-$debug-medium = lighten($debug-dark, 5%)
-$debug-tan = #de935f
-$debug-red = #cc6660
-$debug-padding = 20px
-$debug-white = #efefef
-$debug-blue = #81a2be
-$debug-green = #b5bd68
-$debug-yellow = #f0c674
-$debug-purple = #b294bb
-$debug-orange = #d8773b
-$debug-aqua = #8abeb7
-$debug-nav-width = 350px
-$drag-bar-height = 20px
+@require('./vars')
 
 @keyframes debugger-zoom-in {
   from {
@@ -289,6 +276,9 @@ $drag-bar-height = 20px
 .vue-debugger-container
   z-index: 100000
 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
   .vue-debugger.highlighter
     position: fixed
     transition: all .3s ease-in-out
@@ -316,6 +306,7 @@ $drag-bar-height = 20px
       padding: 0 1rem
 
   a
+    text-decoration: none !important
     cursor: pointer !important
 
   .vue-debugger.nav-pane, .vue-debugger.main-pane
@@ -366,6 +357,7 @@ $drag-bar-height = 20px
       font-size: 2em
       z-index: 1000
       cursor: pointer
+
     .vue-debugger.target
       right: 56px
       color: black
@@ -434,60 +426,6 @@ $drag-bar-height = 20px
         border-bottom-left-radius: 1em
 
 
-  .vue-debugger.nav-pane
-    box-sizing: border-box
-    width: $debug-nav-width
-    display: inline-block
-    float: left
-    height: 100%
-    overflow: auto
-    padding: $debug-padding
-    padding-right: 0
-    background-color: rgba($debug-dark, 0.95)
-    border-right: 1px solid darken($debug-dark, 10%)
-
-    ul, li
-      list-style: none
-      padding: 0
-
-    ul
-      padding: 0
-      padding-left: $debug-padding
-
-    > ul
-      margin: 0
-      padding: 0
-
-    li
-      padding: .3em
-      padding-right: 0
-      color: $debug-purple
-      position: relative
-
-
-      &.children:before
-        position: absolute
-        left: -12px
-        content: '▸'
-
-      &.children.opened:before
-        content: '▾'
-
-      a
-        color: inherit
-        display: block
-        font-weight: bold
-
-        &:hover
-          .toolbar
-            opacity: 1
-            display: flex
-
-      &.active
-        color: $debug-yellow
-
-
-
   .vue-debugger.main-pane
     padding: $debug-padding 0 ($debug-padding*2) 0
     box-sizing: border-box
@@ -501,52 +439,7 @@ $drag-bar-height = 20px
     line-height: 1.7em
     border-left: 1px solid lighten($debug-medium, 12%)
 
-    .obj-tree
-      display: block
-      padding-left: $debug-padding
 
-      .key
-        cursor: pointer
-        color: $debug-blue
-        font-weight: bold
-        position: relative
-
-        .key-val-divider
-          color: $debug-white
-
-        &.Array, &.Object
-          &:before
-            position: absolute
-            left: -12px
-            content: '▸'
-
-      &.empty .key
-        cursor: auto
-
-        &:before
-          display: none
-
-      .value
-        color: $debug-green
-        word-break: break-all
-
-        &.null, &.undefined
-          color: $debug-orange
-
-        &.Number
-          color: $debug-yellow
-
-        &.Boolean
-          color: $debug-yellow
-
-        &.Array, &.Object
-          color: $debug-white
-
-      .container
-        display: none
-
-  .obj-tree:not(.empty) > .key:hover
-    color: lighten($debug-blue, 60%)
 
   .vue-debugger.main-pane .obj-tree.open
     > .key.Array, > .key.Object
