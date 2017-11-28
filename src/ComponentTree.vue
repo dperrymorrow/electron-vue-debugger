@@ -7,8 +7,6 @@
       .toolbar(v-if="open || isActive")
         .btn(@click.stop.prevent="triggerData")
           strong Reload
-
-        .btn(@click.stop.prevent="inspect") Inspect
         .btn(@click.stop.prevent="sendToConsole") $vm
 
 
@@ -78,10 +76,7 @@ export default {
       console.log(this.component);
       console.groupEnd();
     },
-    inspect() {
-      const coords = this.component.$el.getBoundingClientRect();
-      remote.getCurrentWebContents().inspectElement(parseInt(coords.left), parseInt(coords.top));
-    },
+
     dataChange(args) {
       this.$emit("dataChange", args);
     },
