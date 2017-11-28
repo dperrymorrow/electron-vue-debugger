@@ -205,16 +205,20 @@ export default {
   computed: {
     highlighter() {
       if (!this.activeEl) return {};
-      const rect = this.activeEl.getBoundingClientRect();
-      const coords = {
-        top: rect.top + "px",
-        left: rect.left + "px",
-        width: this.activeEl.offsetWidth + "px",
-        height: this.activeEl.offsetHeight + "px",
-        "pointer-events": this.mouseMoving ? "none" : "initial",
-        cursor: this.mouseMoving ? "initial" : "pointer",
-      };
-      return coords;
+      try {
+        const rect = this.activeEl.getBoundingClientRect();
+        const coords = {
+          top: rect.top + "px",
+          left: rect.left + "px",
+          width: this.activeEl.offsetWidth + "px",
+          height: this.activeEl.offsetHeight + "px",
+          "pointer-events": this.mouseMoving ? "none" : "initial",
+          cursor: this.mouseMoving ? "initial" : "pointer",
+        };
+        return coords;
+      } catch (err) {
+        return {};
+      }
     },
   },
 
