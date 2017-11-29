@@ -9,7 +9,13 @@ module.exports = {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
     filename: "build.js",
+    library: "ElectronVueDebugger",
+    // path: config.build.assetsRoot,
+    // filename: utils.assetsPath("index.js"),
+    // library: "Tethys",
+    libraryTarget: "umd",
   },
+
   module: {
     rules: [
       {
