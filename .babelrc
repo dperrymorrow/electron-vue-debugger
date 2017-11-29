@@ -3,7 +3,16 @@
     [
       "env",
       {
-        "modules": false
+        "targets": {
+          "chrome": "59",
+          "edge": "15",
+          "firefox": "54",
+          "safari": "10.1",
+          "node": "7.6",
+          "ios": "10.3",
+          "opera": "42"
+        },
+        "useBuiltIns": true
       }
     ]
   ]

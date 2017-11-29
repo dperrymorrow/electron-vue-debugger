@@ -1,13 +1,13 @@
 const path = require("path");
 const webpack = require("webpack");
 const ENV = process.env.NODE_ENV;
+const minify = require("babel-minify-webpack-plugin");
 
 module.exports = {
   entry: ENV == "development" ? "./dev/index.js" : "./src/index.js",
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
-    libraryTarget: "umd",
     filename: "build.js",
   },
   module: {
@@ -15,22 +15,11 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: "vue-loader",
-        options: {
-          loaders: {},
-          // other vue-loader options go here
-        },
       },
       {
         test: /\.js$/,
         loader: "babel-loader",
         exclude: /node_modules/,
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: "file-loader",
-        options: {
-          name: "[name].[ext]?[hash]",
-        },
       },
     ],
   },
@@ -46,26 +35,15 @@ module.exports = {
   performance: {
     hints: false,
   },
-  devtool: "#eval-source-map",
+
+  devtool: ENV ? "#source-map" : "#eval-source-map",
 };
 
-if (process.env.NODE_ENV === "production") {
-  module.exports.devtool = "#source-map";
+if (ENV === "production") {
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: '"production"',
-      },
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false,
-      },
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-    }),
+    new webpack.DefinePlugin({ "process.env": { NODE_ENV: '"production"' } }),
+    new minify({ removeConsole: true, removeDebugger: true }),
+    new webpack.LoaderOptionsPlugin({ minimize: true }),
   ]);
 }
