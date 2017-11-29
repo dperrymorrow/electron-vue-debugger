@@ -25,6 +25,7 @@
     "lodash.debounce": "4.0.8",
     "lodash.throttle": "4.1.1",
     "pug": "^2.0.0-rc.4",
+    "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "type-of-is": "^3.5.1",
     "vue": "^2.3.3",

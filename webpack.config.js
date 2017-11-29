@@ -10,9 +10,6 @@ module.exports = {
     publicPath: "/dist/",
     filename: "build.js",
     library: "ElectronVueDebugger",
-    // path: config.build.assetsRoot,
-    // filename: utils.assetsPath("index.js"),
-    // library: "Tethys",
     libraryTarget: "umd",
   },
 
@@ -41,9 +38,11 @@ module.exports = {
   performance: {
     hints: false,
   },
-
-  devtool: ENV ? "#source-map" : "#eval-source-map",
 };
+
+if (ENV === "development") {
+  module.exports.devtool = "#source-map";
+}
 
 if (ENV === "production") {
   // http://vue-loader.vuejs.org/en/workflow/production.html
