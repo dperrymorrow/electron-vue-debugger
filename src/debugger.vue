@@ -1,6 +1,6 @@
 
 <template>
-  <div 
+  <div
     class="vue-debugger-container"
     @click.prevent.stop
   >
@@ -14,11 +14,11 @@
         <h4>{{ targeted.$options._componentTag }}</h4>
       </div>
     </transition>
-    <div 
+    <div
       :class="{ opened: open }"
       class="vue-debugger pane"
     >
-      <div 
+      <div
         class="drag-handle"
         @mousedown.stop.prevent="dragging = true"
       />
@@ -27,9 +27,9 @@
         class="vue-debugger target"
         @click.prevent="toggleTargeting"
       >◎</div>
-      <div 
+      <div
         class="vue-debugger toggle"
-        @dblclick="clearStore" 
+        @dblclick="clearStore"
         @click.prevent="toggle"
       >🔮</div>
       <nav-tree
@@ -38,14 +38,14 @@
         :active-key="activeKey"
         @dataChange="dataChange"
       />
-      <div 
+      <div
         v-if="keepAlive || open"
         class="vue-debugger main-pane"
       >
-        <obj-tree 
+        <obj-tree
           v-for="(value, key) in dataSource"
-          :name="key" 
-          :value="value" 
+          :name="key"
+          :value="value"
           :key="key"
         />
       </div>
@@ -56,8 +56,8 @@
 <script>
 import throttle from "lodash.throttle";
 import debounce from "lodash.debounce";
-import NavTree from "./NavTree.vue";
-import ObjTree from "./ObjTree.vue";
+import NavTree from "./nav-tree.vue";
+import ObjTree from "./obj-tree.vue";
 
 export default {
   components: {

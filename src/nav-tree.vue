@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import ComponentTree from "./ComponentTree.vue";
+import ComponentTree from "./component-tree.vue";
 
 export default {
   components: {

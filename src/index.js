@@ -1,5 +1,5 @@
-import Debugger from "./Debugger.vue";
-import ObjTree from "./ObjTree.vue";
+import Debugger from "./debugger.vue";
+import ObjTree from "./obj-tree.vue";
 
 function install(Vue) {
   Vue.component("debugger", Debugger);
