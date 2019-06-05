@@ -1,0 +1,96 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:vue/recommended"
+  ],
+  "rules": {
+    "dot-notation": [
+      "error"
+    ],
+    "eqeqeq": [
+      "error",
+      "smart"
+    ],
+    "no-else-return": [
+      "error"
+    ],
+    "no-extra-bind": [
+      "error"
+    ],
+    "no-extra-label": [
+      "error"
+    ],
+    "no-implicit-coercion": [
+      "error",
+      {
+        "allow": [
+          "!!"
+        ]
+      }
+    ],
+    "comma-dangle": [
+      "error"
+    ],
+    "strict": [
+      "error",
+      "global"
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "no-lonely-if": [
+      "error"
+    ],
+    "arrow-body-style": [
+      "error",
+      "as-needed"
+    ],
+    "no-console": [
+      "off"
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "args": "none"
+      }
+    ],
+    "no-useless-computed-key": [
+      "error"
+    ],
+    "no-useless-rename": [
+      "error"
+    ],
+    "no-var": [
+      "error"
+    ],
+    "prefer-template": [
+      "error"
+    ],
+    "prefer-const": [
+      "warn",
+      {
+        "destructuring": "all"
+      }
+    ],
+    "vars-on-top": [
+      "error"
+    ],
+    "vue/html-closing-bracket-newline": [
+      "error",
+      {
+        "singleline": "never",
+        "multiline": "always"
+      }
+    ]
+  }
+}

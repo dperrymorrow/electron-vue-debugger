@@ -1,22 +1,24 @@
-<template lang="pug">
-  .example-component {{ label }}
+<template>
+  <div class="example-component">
+    {{ label }}
+  </div>
 </template>
 
 
 <script>
 export default {
-  methods: {},
   props: {
     label: {
       type: String,
-    },
+      required: true
+    }
   },
+  methods: {}
 };
 </script>
 
 
 <style lang="stylus">
-
   .example-component
     width: 300px
     background-color: tomato

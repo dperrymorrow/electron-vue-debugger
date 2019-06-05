@@ -4,40 +4,40 @@ const ENV = process.env.NODE_ENV;
 const minify = require("babel-minify-webpack-plugin");
 
 module.exports = {
-  entry: ENV == "development" ? "./dev/index.js" : "./src/index.js",
+  entry: ENV === "development" ? "./dev/index.js" : "./src/index.js",
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
     filename: "build.js",
     library: "ElectronVueDebugger",
-    libraryTarget: "umd",
+    libraryTarget: "umd"
   },
 
   module: {
     rules: [
       {
         test: /\.vue$/,
-        loader: "vue-loader",
+        loader: "vue-loader"
       },
       {
         test: /\.js$/,
         loader: "babel-loader",
-        exclude: /node_modules/,
-      },
-    ],
+        exclude: /node_modules/
+      }
+    ]
   },
   resolve: {
     alias: {
-      vue$: "vue/dist/vue.esm.js",
-    },
+      vue$: "vue/dist/vue.esm.js"
+    }
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true,
+    noInfo: true
   },
   performance: {
-    hints: false,
-  },
+    hints: false
+  }
 };
 
 if (ENV === "development") {
@@ -49,6 +49,6 @@ if (ENV === "production") {
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({ "process.env": { NODE_ENV: '"production"' } }),
     new minify({ removeConsole: true, removeDebugger: true }),
-    new webpack.LoaderOptionsPlugin({ minimize: true }),
+    new webpack.LoaderOptionsPlugin({ minimize: true })
   ]);
 }

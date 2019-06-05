@@ -1,31 +1,60 @@
-<template lang="pug">
-  .vue-debugger.nav-pane
-    ul
-      li(v-if="usingVuex", :class="{ active: activeKey == 'vuex' }")
-        a(@click.prevent="dataChange({ name: 'vuex', id: 'vuex', data: $store.state })") Vuex
-
-      li(v-if="usingVuex", :class="{ active: activeKey == 'mutations' }")
-        a(@click.prevent="dataChange({ name: 'mutations', id: 'mutations', data: mutations })") Mutations
-          span.count.reload(v-if="Object.keys(mutations).length", @click="clearMutations") Clear
-
-      component-tree(
-        v-if="comp.$options._componentTag !== 'debugger'",
-        v-for="comp in components",
-        @dataChange="dataChange",
-        :key="comp._uid",
-        :component="comp",
-        :activeKey="activeKey"
-      )
+<template>
+  <div class="vue-debugger nav-pane">
+    <ul>
+      <li
+        v-if="usingVuex"
+        :class="{ active: activeKey == 'vuex' }"
+      >
+        <a @click.prevent="dataChange({ name: 'vuex', id: 'vuex', data: $store.state })">Vuex</a>
+      </li>
+      <li
+        v-if="usingVuex"
+        :class="{ active: activeKey == 'mutations' }"
+      >
+        <a @click.prevent="dataChange({ name: 'mutations', id: 'mutations', data: mutations })">
+          Mutations
+          <span
+            v-if="Object.keys(mutations).length"
+            class="count reload"
+            @click="clearMutations"
+          >Clear</span>
+        </a>
+      </li>
+      <component-tree
+        v-for="comp in components"
+        v-if="comp.$options._componentTag !== 'debugger'"
+        :key="comp._uid"
+        :component="comp"
+        :active-key="activeKey"
+        @dataChange="dataChange"
+      />
+    </ul>
+  </div>
 </template>
 
 <script>
 import ComponentTree from "./ComponentTree.vue";
 
 export default {
-  props: ["components", "activeKey"],
-
   components: {
-    ComponentTree,
+    ComponentTree
+  },
+  props: {
+    components: { type: Array, required: true },
+    activeKey: { type: [String, Number], required: true }
+  },
+
+  data() {
+    return {
+      mutations: {},
+      int: 0
+    };
+  },
+
+  computed: {
+    usingVuex() {
+      return typeof this.$store === "undefined" ? false : true;
+    }
   },
 
   mounted() {
@@ -35,7 +64,11 @@ export default {
 
     if (this.$store) {
       this.$store.subscribe((mutation, state) => {
-        this.$set(this.mutations, mutation.type + " | " + this.timeNow(), mutation.payload);
+        this.$set(
+          this.mutations,
+          `${mutation.type} | ${this.timeNow()}`,
+          mutation.payload
+        );
       });
     }
   },
@@ -44,20 +77,14 @@ export default {
     clearInterval(this.int);
   },
 
-  computed: {
-    usingVuex() {
-      return typeof this.$store === "undefined" ? false : true;
-    },
-  },
-
   methods: {
     timeNow() {
-      var d = new Date();
+      const d = new Date();
       return [
         d.getHours(),
         d.getMinutes(),
         d.getSeconds(),
-        (d.getMilliseconds() / 10).toFixed(2),
+        (d.getMilliseconds() / 10).toFixed(2)
       ].join(":");
     },
 
@@ -67,15 +94,8 @@ export default {
 
     clearMutations() {
       this.mutations = {};
-    },
-  },
-
-  data() {
-    return {
-      mutations: {},
-      int: 0,
-    };
-  },
+    }
+  }
 };
 </script>
 
