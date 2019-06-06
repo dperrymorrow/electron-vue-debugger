@@ -1,9 +1,9 @@
 <template>
   <div class="vue-debugger nav-pane">
+    <vuex-tree v-if="$store" />
     <ul>
-
       <component-tree
-        v-for="comp in components.filter(comp => comp.$options._componentTag !== 'debugger')"
+        v-for="comp in $root.$children.filter(comp => comp.$options._componentTag !== 'debugger')"
         :key="comp._uid"
         :component="comp"
       />
@@ -12,69 +12,22 @@
 </template>
 
 <script>
+import VuexTree from "./vuex-tree";
 import ComponentTree from "./component-tree.vue";
 
 export default {
   components: {
+    VuexTree,
     ComponentTree
-  },
-
-  props: {
-    components: { type: Array, required: true }
-  },
-
-  data() {
-    return {
-      mutations: {},
-      int: 0
-    };
-  },
-
-  computed: {
-    usingVuex() {
-      return typeof this.$store === "undefined" ? false : true;
-    }
-  },
-
-  mounted() {
-    this.int = setInterval(() => {
-      this.$forceUpdate();
-    }, 1000);
-
-    if (this.$store) {
-      this.$store.subscribe((mutation, state) => {
-        this.$set(
-          this.mutations,
-          `${mutation.type} | ${this.timeNow()}`,
-          mutation.payload
-        );
-      });
-    }
-  },
-
-  beforeDetroy() {
-    clearInterval(this.int);
-  },
-
-  methods: {
-    timeNow() {
-      const d = new Date();
-      return [
-        d.getHours(),
-        d.getMinutes(),
-        d.getSeconds(),
-        (d.getMilliseconds() / 10).toFixed(2)
-      ].join(":");
-    },
-
-    dataChange(args) {
-      this.$emit("dataChange", args);
-    },
-
-    clearMutations() {
-      this.mutations = {};
-    }
   }
+
+  // watch: {
+  //   components: {
+  //     handler() {
+  //       console.log("changed");
+  //     }
+  //   }
+  // }
 };
 </script>
 

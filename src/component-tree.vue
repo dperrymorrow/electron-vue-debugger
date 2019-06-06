@@ -1,14 +1,14 @@
 <template>
-  <li :class="{ active, opened, children: component.$children.length }">
+  <li :class="{ active, opened, children: children.length }">
     <a
       class="component-link"
       @click.prevent="toggle"
     >
       &lt;{{ kebabCase(component.$options.name) || component.$options._componentTag }}&gt;
       <span
-        v-if="component.$children.length"
+        v-if="children.length"
         class="count"
-      >{{ component.$children.length }}</span>
+      >{{ children.length }}</span>
 
       <div
         v-if="active"
@@ -28,9 +28,9 @@
     </a>
 
     <!-- recursive -->
-    <ul v-if="component.$children.length && opened">
+    <ul v-if="children.length && opened">
       <component-tree
-        v-for="comp in component.$children"
+        v-for="comp in children"
         :component="comp"
         :key="comp._uid"
       />
@@ -58,10 +58,30 @@ export default {
     };
   },
 
+  computed: {
+    children() {
+      return this.component.$children;
+    }
+  },
+
+  watch: {
+    children() {
+      console.log("changed");
+    }
+  },
+
   mounted() {
     EventBus.$on("navClick", activeKey => {
       this.active = activeKey === this.component._uid;
     });
+
+    this.int = setInterval(() => {
+      this.$forceUpdate();
+    }, 1000);
+  },
+
+  beforeDestroy() {
+    clearInterval(this.int);
   },
 
   methods: {
@@ -79,7 +99,7 @@ export default {
       else this.opened = !this.opened;
       if (this.opened) {
         EventBus.$emit("navClick", this.component._uid);
-        EventBus.$emit("dataChange", this.component);
+        EventBus.$emit("dataSource", { component: this.component });
       }
     }
   }

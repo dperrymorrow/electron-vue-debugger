@@ -32,10 +32,9 @@
         @dblclick="clearStore"
         @click.prevent="toggle"
       >🔮</div>
-      <nav-tree
-        v-if="keepAlive || open"
-        :components="components"
-      />
+
+      <nav-tree v-if="keepAlive || open" />
+
       <div
         v-if="keepAlive || open"
         class="vue-debugger main-pane"
@@ -52,6 +51,7 @@
 </template>
 
 <script>
+import EventBus from "./event-bus";
 import throttle from "lodash.throttle";
 import debounce from "lodash.debounce";
 import NavTree from "./nav-tree.vue";
@@ -64,10 +64,6 @@ export default {
   },
 
   props: {
-    components: {
-      type: Array,
-      required: true
-    },
     keepAlive: {
       default: false,
       type: Boolean,
@@ -83,7 +79,7 @@ export default {
       showHighlight: false,
       activeKey: "vuex",
       open: false,
-      dataSource: this.$store ? this.$store.state : null,
+      dataSource: null,
       targeting: false,
       targeted: undefined,
       mouseMoving: false
@@ -115,6 +111,7 @@ export default {
     window.addEventListener("mouseup", this.disableDrag);
     window.addEventListener("mousemove", this.drag);
     window.addEventListener("resize", this.updateHeight);
+    EventBus.$on("dataSource", this.dataChange);
   },
 
   beforeDestroy() {

@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Vuex from "Vuex";
+import ElectronVueDebugger from "../src";
+
 Vue.use(Vuex);
+Vue.use(ElectronVueDebugger);
 
 const store = new Vuex.Store({
   state: { foo: "bar" },
