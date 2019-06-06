@@ -55,7 +55,11 @@ export default {
   name: "ObjTree",
   props: {
     name: { type: String, required: true },
-    value: { type: [String, Number, Object, Array, Boolean], required: true },
+    value: {
+      type: [String, Number, Object, Array, Boolean],
+      required: false,
+      default: () => null
+    },
     parentOpen: { type: Boolean, required: false, default: false }
   },
   data() {
@@ -97,7 +101,7 @@ export default {
     },
 
     log() {
-      console.log(JSON.stringify(this.value, null, 2));
+      console.dir(JSON.parse(JSON.stringify(this.value, null, 2)));
     },
 
     printValue() {

@@ -35,6 +35,12 @@ module.exports = {
     historyApiFallback: true,
     noInfo: true
   },
+
+  externals: {
+    vue: "Vue",
+    vuex: "Vuex"
+  },
+
   performance: {
     hints: false
   }

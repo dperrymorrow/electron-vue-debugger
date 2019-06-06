@@ -1,25 +1,25 @@
 <template>
   <li :class="{ active: isActive, opened: open, children: hasChildren }">
-    <a 
+    <a
       class="component-link"
       @click.prevent="select"
     >
-      &lt;{{ component.$options.name || component.$options._componentTag }}&gt;
+      &lt;{{ kebabCase(component.$options.name) || component.$options._componentTag }}&gt;
       <span
         v-if="hasChildren"
         class="count"
       >{{ children.length }}</span>
-      <div 
+      <div
         v-if="open || isActive"
         class="toolbar"
       >
-        <div 
+        <div
           class="btn"
           @click.stop.prevent="triggerData"
         >
           <strong>Reload</strong>
         </div>
-        <div 
+        <div
           class="btn"
           @click.stop.prevent="sendToConsole"
         >$vm</div>
@@ -40,12 +40,17 @@
 </template>
 
 <script>
+import kebabCase from "lodash.kebabcase";
+
 export default {
   name: "ComponentTree",
+
+  filters: { kebabCase },
   props: {
     component: { type: Object, required: true },
     activeKey: { type: [String, Number], required: true }
   },
+
   data() {
     return {
       open: false,
@@ -82,6 +87,10 @@ export default {
   },
 
   methods: {
+    kebabCase(val) {
+      return kebabCase(val);
+    },
+
     setOpen(val) {
       if (this.open !== val) this.open = val;
       this.$emit("set-open", val);
