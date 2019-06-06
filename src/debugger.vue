@@ -351,15 +351,8 @@ export default {
     cursor: pointer !important;
 
   .vue-debugger.nav-pane, .vue-debugger.main-pane
-    &::-webkit-scrollbar
-      width: 10px;
-
-    &::-webkit-scrollbar-thumb
-      background: rgba($debug-purple, 0.3);
-      border-radius: 5px;
-
-    &::-webkit-scrollbar-track
-      background: transparent;
+    &::-webkit-scrollbar, &::-webkit-scrollbar-thumb, &::-webkit-scrollbar-track
+      display: none
 
   .vue-debugger.pane
     font-family: Monaco, monospace;
