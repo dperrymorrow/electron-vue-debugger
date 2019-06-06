@@ -1,32 +1,11 @@
 <template>
   <div class="vue-debugger nav-pane">
     <ul>
-      <li
-        v-if="usingVuex"
-        :class="{ active: activeKey == 'vuex' }"
-      >
-        <a @click.prevent="dataChange({ name: 'vuex', id: 'vuex', data: $store.state })">Vuex</a>
-      </li>
-      <li
-        v-if="usingVuex"
-        :class="{ active: activeKey == 'mutations' }"
-      >
-        <a @click.prevent="dataChange({ name: 'mutations', id: 'mutations', data: mutations })">
-          Mutations
-          <span
-            v-if="Object.keys(mutations).length"
-            class="count reload"
-            @click="clearMutations"
-          >Clear</span>
-        </a>
-      </li>
+
       <component-tree
-        v-for="comp in components"
-        v-if="comp.$options._componentTag !== 'debugger'"
+        v-for="comp in components.filter(comp => comp.$options._componentTag !== 'debugger')"
         :key="comp._uid"
         :component="comp"
-        :active-key="activeKey"
-        @dataChange="dataChange"
       />
     </ul>
   </div>
@@ -39,9 +18,9 @@ export default {
   components: {
     ComponentTree
   },
+
   props: {
-    components: { type: Array, required: true },
-    activeKey: { type: [String, Number], required: true }
+    components: { type: Array, required: true }
   },
 
   data() {

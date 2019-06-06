@@ -35,8 +35,6 @@
       <nav-tree
         v-if="keepAlive || open"
         :components="components"
-        :active-key="activeKey"
-        @dataChange="dataChange"
       />
       <div
         v-if="keepAlive || open"

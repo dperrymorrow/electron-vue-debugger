@@ -1,16 +1,17 @@
 <template>
-  <li :class="{ active: isActive, opened: open, children: hasChildren }">
+  <li :class="{ active, opened, children: component.$children.length }">
     <a
       class="component-link"
-      @click.prevent="select"
+      @click.prevent="toggle"
     >
       &lt;{{ kebabCase(component.$options.name) || component.$options._componentTag }}&gt;
       <span
-        v-if="hasChildren"
+        v-if="component.$children.length"
         class="count"
-      >{{ children.length }}</span>
+      >{{ component.$children.length }}</span>
+
       <div
-        v-if="open || isActive"
+        v-if="active"
         class="toolbar"
       >
         <div
@@ -25,97 +26,61 @@
         >$vm</div>
       </div>
     </a>
-    <ul v-if="hasChildren">
+
+    <!-- recursive -->
+    <ul v-if="component.$children.length && opened">
       <component-tree
-        v-for="comp in children"
-        v-show="open"
-        :active-key="activeKey"
+        v-for="comp in component.$children"
         :component="comp"
         :key="comp._uid"
-        @dataChange="dataChange"
-        @set-open="setOpen"
       />
     </ul>
+
   </li>
 </template>
 
 <script>
+import EventBus from "./event-bus";
 import kebabCase from "lodash.kebabcase";
 
 export default {
   name: "ComponentTree",
 
-  filters: { kebabCase },
   props: {
-    component: { type: Object, required: true },
-    activeKey: { type: [String, Number], required: true }
+    component: { type: Object, required: true }
   },
 
   data() {
     return {
-      open: false,
-      int: 0,
-      children: this.component.$children
+      opened: false,
+      active: false,
+      int: 0
     };
   },
 
-  computed: {
-    hasChildren() {
-      return this.children.length > 0;
-    },
-    isActive() {
-      return this.component._uid === this.activeKey;
-    }
-  },
-
-  watch: {
-    isActive(val) {
-      if (val) {
-        this.setOpen(true);
-      }
-    }
-  },
-
   mounted() {
-    this.int = setInterval(() => {
-      this.$forceUpdate();
-    }, 1000);
-  },
-
-  beforeDestroy() {
-    clearInterval(this.int);
+    EventBus.$on("navClick", activeKey => {
+      this.active = activeKey === this.component._uid;
+    });
   },
 
   methods: {
-    kebabCase(val) {
-      return kebabCase(val);
-    },
+    kebabCase: val => kebabCase(val),
 
-    setOpen(val) {
-      if (this.open !== val) this.open = val;
-      this.$emit("set-open", val);
-    },
     sendToConsole() {
       window.$vm = this.component;
       console.groupCollapsed(`window.$vm = ${this.component.$options.name}`);
-      console.log(this.component);
+      console.dir(this.component);
       console.groupEnd();
     },
 
-    dataChange(args) {
-      this.$emit("dataChange", args);
-    },
-    select() {
-      this.triggerData();
-      this.toggle();
-    },
-    triggerData() {
-      this.dataChange({
-        component: this.component
-      });
-    },
     toggle() {
-      this.open = !this.open;
+      if (this.opened && !this.active) this.active = true;
+      else this.opened = !this.opened;
+      if (this.opened) {
+        EventBus.$emit("navClick", this.component._uid);
+        EventBus.$emit("dataChange", this.component);
+      }
     }
   }
 };
