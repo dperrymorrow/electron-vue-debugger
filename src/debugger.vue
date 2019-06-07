@@ -32,12 +32,9 @@
         @dblclick="clearStore"
         @click.prevent="toggle"
       >🔮</div>
-      <nav-tree
-        v-if="keepAlive || open"
-        :components="components"
-        :active-key="activeKey"
-        @dataChange="dataChange"
-      />
+
+      <nav-tree v-if="keepAlive || open" />
+
       <div
         v-if="keepAlive || open"
         class="vue-debugger main-pane"
@@ -66,10 +63,6 @@ export default {
   },
 
   props: {
-    components: {
-      type: Array,
-      required: true
-    },
     keepAlive: {
       default: false,
       type: Boolean,
@@ -85,7 +78,7 @@ export default {
       showHighlight: false,
       activeKey: "vuex",
       open: false,
-      dataSource: this.$store ? this.$store.state : null,
+      dataSource: null,
       targeting: false,
       targeted: undefined,
       mouseMoving: false
@@ -117,6 +110,7 @@ export default {
     window.addEventListener("mouseup", this.disableDrag);
     window.addEventListener("mousemove", this.drag);
     window.addEventListener("resize", this.updateHeight);
+    this.$root.$on("dataSource", this.dataChange);
   },
 
   beforeDestroy() {
@@ -351,15 +345,8 @@ export default {
     cursor: pointer !important;
 
   .vue-debugger.nav-pane, .vue-debugger.main-pane
-    &::-webkit-scrollbar
-      width: 10px;
-
-    &::-webkit-scrollbar-thumb
-      background: rgba($debug-purple, 0.3);
-      border-radius: 5px;
-
-    &::-webkit-scrollbar-track
-      background: transparent;
+    &::-webkit-scrollbar, &::-webkit-scrollbar-thumb, &::-webkit-scrollbar-track
+      display: none
 
   .vue-debugger.pane
     font-family: Monaco, monospace;

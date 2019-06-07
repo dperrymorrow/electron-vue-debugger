@@ -1,99 +1,53 @@
 <template>
   <div class="vue-debugger nav-pane">
+    <vuex-tree v-if="$store" />
+
+    <ul v-if="$router">
+      <li :class="{ active: activeKey === 'router' }">
+        <a @click="selectRouter">Router</a>
+      </li>
+    </ul>
+
+    <hr v-if="$router || $store">
+
     <ul>
-      <li
-        v-if="usingVuex"
-        :class="{ active: activeKey == 'vuex' }"
-      >
-        <a @click.prevent="dataChange({ name: 'vuex', id: 'vuex', data: $store.state })">Vuex</a>
-      </li>
-      <li
-        v-if="usingVuex"
-        :class="{ active: activeKey == 'mutations' }"
-      >
-        <a @click.prevent="dataChange({ name: 'mutations', id: 'mutations', data: mutations })">
-          Mutations
-          <span
-            v-if="Object.keys(mutations).length"
-            class="count reload"
-            @click="clearMutations"
-          >Clear</span>
-        </a>
-      </li>
       <component-tree
-        v-for="comp in components"
-        v-if="comp.$options._componentTag !== 'debugger'"
+        v-for="comp in $root.$children"
         :key="comp._uid"
         :component="comp"
-        :active-key="activeKey"
-        @dataChange="dataChange"
       />
     </ul>
   </div>
 </template>
 
 <script>
+import VuexTree from "./vuex-tree";
 import ComponentTree from "./component-tree.vue";
 
 export default {
   components: {
+    VuexTree,
     ComponentTree
-  },
-  props: {
-    components: { type: Array, required: true },
-    activeKey: { type: [String, Number], required: true }
   },
 
   data() {
-    return {
-      mutations: {},
-      int: 0
-    };
-  },
-
-  computed: {
-    usingVuex() {
-      return typeof this.$store === "undefined" ? false : true;
-    }
+    return { activeKey: null };
   },
 
   mounted() {
-    this.int = setInterval(() => {
-      this.$forceUpdate();
-    }, 1000);
-
-    if (this.$store) {
-      this.$store.subscribe((mutation, state) => {
-        this.$set(
-          this.mutations,
-          `${mutation.type} | ${this.timeNow()}`,
-          mutation.payload
-        );
-      });
-    }
-  },
-
-  beforeDetroy() {
-    clearInterval(this.int);
+    this.$root.$on("navClick", activeKey => {
+      this.activeKey = activeKey;
+    });
   },
 
   methods: {
-    timeNow() {
-      const d = new Date();
-      return [
-        d.getHours(),
-        d.getMinutes(),
-        d.getSeconds(),
-        (d.getMilliseconds() / 10).toFixed(2)
-      ].join(":");
-    },
-
-    dataChange(args) {
-      this.$emit("dataChange", args);
-    },
-
-    clearMutations() {
-      this.mutations = {};
+    selectRouter() {
+      this.$root.$emit("navClick", "router");
+      this.$root.$emit("dataSource", {
+        name: "route",
+        id: "router",
+        data: this.$route
+      });
     }
   }
 };
@@ -113,6 +67,12 @@ export default {
   padding-right: 0
   background-color: rgba($debug-dark, 0.95)
   border-right: 1px solid darken($debug-dark, 10%)
+
+  hr
+    border-bottom: 1px solid $debug-purple
+    border-top: 1px solid black
+    opacity: 0.3
+    margin: ($debug-padding/2) $debug-padding ($debug-padding/2) 0
 
   ul, li
     list-style: none

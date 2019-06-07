@@ -5,7 +5,7 @@
     class="vue-debugger obj-tree"
   >
     <span
-      v-if="name != undefined"
+      v-if="name !== undefined"
       :class="type"
       class="key"
       @click.prevent="toggle"
@@ -56,7 +56,7 @@ export default {
   props: {
     name: { type: String, required: true },
     value: {
-      type: [String, Number, Object, Array, Boolean],
+      validator: () => true,
       required: false,
       default: () => null
     },
