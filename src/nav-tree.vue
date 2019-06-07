@@ -1,9 +1,18 @@
 <template>
   <div class="vue-debugger nav-pane">
     <vuex-tree v-if="$store" />
+
+    <ul v-if="$router">
+      <li :class="{ active: activeKey === 'router' }">
+        <a @click="selectRouter">Router</a>
+      </li>
+    </ul>
+
+    <hr v-if="$router || $store">
+
     <ul>
       <component-tree
-        v-for="comp in $root.$children.filter(comp => comp.$options._componentTag !== 'debugger')"
+        v-for="comp in $root.$children"
         :key="comp._uid"
         :component="comp"
       />
@@ -19,15 +28,28 @@ export default {
   components: {
     VuexTree,
     ComponentTree
-  }
+  },
 
-  // watch: {
-  //   components: {
-  //     handler() {
-  //       console.log("changed");
-  //     }
-  //   }
-  // }
+  data() {
+    return { activeKey: null };
+  },
+
+  mounted() {
+    this.$root.$on("navClick", activeKey => {
+      this.activeKey = activeKey;
+    });
+  },
+
+  methods: {
+    selectRouter() {
+      this.$root.$emit("navClick", "router");
+      this.$root.$emit("dataSource", {
+        name: "route",
+        id: "router",
+        data: this.$route
+      });
+    }
+  }
 };
 </script>
 
@@ -45,6 +67,12 @@ export default {
   padding-right: 0
   background-color: rgba($debug-dark, 0.95)
   border-right: 1px solid darken($debug-dark, 10%)
+
+  hr
+    border-bottom: 1px solid $debug-purple
+    border-top: 1px solid black
+    opacity: 0.3
+    margin: ($debug-padding/2) $debug-padding ($debug-padding/2) 0
 
   ul, li
     list-style: none

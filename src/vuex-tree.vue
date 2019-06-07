@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import EventBus from "./event-bus";
-
 export default {
   name: "VuexTree",
 
@@ -35,7 +33,7 @@ export default {
   },
 
   mounted() {
-    EventBus.$on("navClick", activeKey => {
+    this.$root.$on("navClick", activeKey => {
       this.activeKey = activeKey;
     });
 
@@ -54,8 +52,8 @@ export default {
     },
 
     selectGetters() {
-      EventBus.$emit("navClick", "vuex:getters");
-      EventBus.$emit("dataSource", {
+      this.$root.$emit("navClick", "vuex:getters");
+      this.$root.$emit("dataSource", {
         name: "getters",
         id: "getters",
         data: this.$store.getters
@@ -63,8 +61,8 @@ export default {
     },
 
     selectMutations() {
-      EventBus.$emit("navClick", "vuex:mutations");
-      EventBus.$emit("dataSource", {
+      this.$root.$emit("navClick", "vuex:mutations");
+      this.$root.$emit("dataSource", {
         name: "mutations",
         id: "mutations",
         data: this.mutations
@@ -72,8 +70,8 @@ export default {
     },
 
     selectState() {
-      EventBus.$emit("navClick", "vuex:state");
-      EventBus.$emit("dataSource", {
+      this.$root.$emit("navClick", "vuex:state");
+      this.$root.$emit("dataSource", {
         name: "vuex",
         id: "vuex",
         data: this.$store.state

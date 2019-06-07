@@ -1,14 +1,14 @@
 <template>
-  <li :class="{ active, opened, children: children.length }">
+  <li :class="{ active, opened, children: component.$children.length }">
     <a
       class="component-link"
       @click.prevent="toggle"
     >
       &lt;{{ kebabCase(component.$options.name) || component.$options._componentTag }}&gt;
       <span
-        v-if="children.length"
+        v-if="component.$children.length"
         class="count"
-      >{{ children.length }}</span>
+      >{{ component.$children.length }}</span>
 
       <div
         v-if="active"
@@ -28,9 +28,9 @@
     </a>
 
     <!-- recursive -->
-    <ul v-if="children.length && opened">
+    <ul v-if="component.$children.length && opened">
       <component-tree
-        v-for="comp in children"
+        v-for="comp in component.$children.filter(comp => comp.$options._componentTag !== 'debugger')"
         :component="comp"
         :key="comp._uid"
       />
@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import EventBus from "./event-bus";
 import kebabCase from "lodash.kebabcase";
 
 export default {
@@ -58,20 +57,8 @@ export default {
     };
   },
 
-  computed: {
-    children() {
-      return this.component.$children;
-    }
-  },
-
-  watch: {
-    children() {
-      console.log("changed");
-    }
-  },
-
   mounted() {
-    EventBus.$on("navClick", activeKey => {
+    this.$root.$on("navClick", activeKey => {
       this.active = activeKey === this.component._uid;
     });
 
@@ -98,8 +85,8 @@ export default {
       if (this.opened && !this.active) this.active = true;
       else this.opened = !this.opened;
       if (this.opened) {
-        EventBus.$emit("navClick", this.component._uid);
-        EventBus.$emit("dataSource", { component: this.component });
+        this.$root.$emit("navClick", this.component._uid);
+        this.$root.$emit("dataSource", { component: this.component });
       }
     }
   }

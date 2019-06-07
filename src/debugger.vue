@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import EventBus from "./event-bus";
 import throttle from "lodash.throttle";
 import debounce from "lodash.debounce";
 import NavTree from "./nav-tree.vue";
@@ -111,7 +110,7 @@ export default {
     window.addEventListener("mouseup", this.disableDrag);
     window.addEventListener("mousemove", this.drag);
     window.addEventListener("resize", this.updateHeight);
-    EventBus.$on("dataSource", this.dataChange);
+    this.$root.$on("dataSource", this.dataChange);
   },
 
   beforeDestroy() {
